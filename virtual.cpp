@@ -121,7 +121,6 @@ struct Template : Iface {
     }
 };
 
-
 template<size_t ... I>
 std::vector<Iface*> generateImpl(std::index_sequence<I...>) {
     return {new Template<I>{}...};
@@ -132,23 +131,12 @@ std::vector<Iface*> generate() {
     return generateImpl(std::make_index_sequence<I>{});
 }
 
-void MB_SumTemplate10Rand(benchmark::State& state) {
-    std::vector<Iface*> set = generate<10>();
+void MB_SumTemplateRand(benchmark::State& state) {
+    static std::vector<Iface*> pattern = generate<30>();
+    const size_t pattern_length = state.range(0);
     std::vector<Iface*> vec;
     for (std::size_t i = 0; i < N; ++i) {
-        vec.push_back(set[rand() % set.size()]);
-    }
-
-    for (auto _ : state) {
-        benchmark::DoNotOptimize(sum(vec));
-    }
-}
-
-void MB_SumTemplate20Rand(benchmark::State& state) {
-    std::vector<Iface*> set = generate<20>();
-    std::vector<Iface*> vec;
-    for (std::size_t i = 0; i < N; ++i) {
-        vec.push_back(set[rand() % set.size()]);
+        vec.push_back(pattern[rand() % pattern_length]);
     }
 
     for (auto _ : state) {
@@ -174,8 +162,7 @@ BENCHMARK(MB_SumSameObject);
 BENCHMARK(MB_SumSameClassDifferentObject);
 BENCHMARK(MB_SumTwoClassesOddEven);
 BENCHMARK(MB_SumTwoClassesRand);
-BENCHMARK(MB_SumTemplate10Rand);
-BENCHMARK(MB_SumTemplate20Rand);
+BENCHMARK(MB_SumTemplateRand)->DenseRange(1, 30, 1);
 BENCHMARK(MB_SumTemplate20Sorted);
 BENCHMARK(MB_SumTwoClassesPattern)->DenseRange(1, 101, 1);
 
