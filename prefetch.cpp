@@ -4,7 +4,7 @@
 #include <random>
 
 const size_t N = 10000;
-int8_t matrix[N][N];
+uint8_t matrix[N][N];
 
 using Pair = std::pair<size_t, size_t>;
 using List = std::vector<Pair>;

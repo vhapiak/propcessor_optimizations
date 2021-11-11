@@ -88,16 +88,21 @@ void MB_SumTwoClassesRand(benchmark::State& state) {
     }
 }
 
-void MB_SumTwoClassesPattern(benchmark::State& state) {
+std::vector<Iface*> generateRandom() {
     std::vector<Iface*> pattern;
-    const size_t pattern_length = state.range(0);
-    for (std::size_t i = 0; i < pattern_length; ++i) {
+    for (std::size_t i = 0; i < 200; ++i) {
         if (rand() % 2) {
             pattern.push_back(new A{});
         } else {
             pattern.push_back(new B{});
         }
     }
+    return pattern;
+}
+
+void MB_SumTwoClassesPattern(benchmark::State& state) {
+    static std::vector<Iface*> pattern = generateRandom();
+    const size_t pattern_length = state.range(0);
 
     std::vector<Iface*> vec;
     for (std::size_t i = 0; i < N; ++i) {
@@ -106,9 +111,6 @@ void MB_SumTwoClassesPattern(benchmark::State& state) {
 
     for (auto _ : state) {
         benchmark::DoNotOptimize(sum(vec));
-    }
-    for (Iface* p : pattern) {
-        delete p;
     }
 }
 
@@ -146,7 +148,7 @@ void MB_SumTemplate20Rand(benchmark::State& state) {
     std::vector<Iface*> set = generate<20>();
     std::vector<Iface*> vec;
     for (std::size_t i = 0; i < N; ++i) {
-        vec.push_back(set[i % set.size()]);
+        vec.push_back(set[rand() % set.size()]);
     }
 
     for (auto _ : state) {
