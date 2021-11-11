@@ -6,28 +6,6 @@
 #include <cmath>
 #include <functional>
 
-// double foo() {
-//     double result = 0;
-//     for (int i = 0; i < 10000000; ++i) {
-//         double j = i;
-//         double b = std::cos(j);
-//         double a = std::sin(j * 2);
-//         result += a * b + a / b;
-//     }
-//     return result;
-// }
-
-// double deps() {
-//     double result = 0;
-//     for (int i = 0; i < 10000000; ++i) {
-//         double j = i;
-//         double b = std::cos(j);
-//         double a = std::sin(b * 2);
-//         result += j + a * b / b;
-//     }
-//     return result;
-// }
-
 std::vector<double> g(1 << 23, 1.0);
 
 double light(double a) {
@@ -43,7 +21,7 @@ using Fn = std::function<double(double)>;
 double foo(std::vector<Fn>& values) {
     double result = 0;
     for (int i = 0; i < values.size(); ++i) {
-        auto a = values[i](i);
+        auto a = values[i](i); // branch miss
         auto b = g[rand() % g.size()]; // cachemiss
         result += a * b;
     }
@@ -54,7 +32,7 @@ double deps(std::vector<Fn>& values) {
     double result = 0;
     for (int i = 0; i < values.size(); ++i) {
         auto b = g[rand() % g.size()]; // cachemiss
-        auto a = values[i](i);
+        auto a = values[i](i); // branch miss
         result += a * b;
     }
     return result;
