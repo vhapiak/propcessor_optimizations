@@ -16,8 +16,9 @@ target_link_libraries(Threads benchmark::benchmark)
 add_executable(Virtual virtual.cpp)
 target_link_libraries(Virtual benchmark::benchmark)
 
+add_executable(Branches branches.cpp)
+target_link_libraries(Branches benchmark::benchmark)
+
 # add_executable(Reordering ordering.cpp)
 # target_link_libraries(Reordering benchmark::benchmark)
 
-# add_executable(Branches branches.cpp)
-# target_link_libraries(Branches benchmark::benchmark)

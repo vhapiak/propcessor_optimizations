@@ -176,11 +176,12 @@ void MB_DeepPattern(benchmark::State& state) {
         benchmark::DoNotOptimize(sumDeep(data));
     }
 }
-// BENCHMARK(MB_OnlyDigits);
-// BENCHMARK(MB_Random);
-// BENCHMARK(MB_OnlyDigitsLookUp);
-// BENCHMARK(MB_RandomLookUp);
-// BENCHMARK(MB_Pattern)->DenseRange(1, 10001, 100);
+
+BENCHMARK(MB_OnlyDigits);
+BENCHMARK(MB_Random);
+BENCHMARK(MB_OnlyDigitsLookUp);
+BENCHMARK(MB_RandomLookUp);
+BENCHMARK(MB_Pattern)->DenseRange(1, 10001, 100);
 BENCHMARK(MB_DeepConst);
 BENCHMARK(MB_DeepRand);
 BENCHMARK(MB_DeepPattern)->DenseRange(1, 100, 1);
